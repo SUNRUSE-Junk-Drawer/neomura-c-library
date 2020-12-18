@@ -72,8 +72,8 @@ typedef double f64_t;
 
 #define STATE(name, type) \
   EXPORT type state_ ## name ## _buffer; \
-  EXPORT const s32_t state_ ## name ## _size = sizeof(type);
+  EXPORT const u32_t state_ ## name ## _size = sizeof(type);
 
 #define STATE_ARRAY(name, type, quantity) \
   EXPORT type state_ ## name ## _buffer[quantity]; \
-  EXPORT const s32_t state_ ## name ## _size = sizeof(type) * quantity;
+  EXPORT const u32_t state_ ## name ## _size = sizeof(type) * quantity;
