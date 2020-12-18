@@ -126,3 +126,22 @@ INPUT_DPAD_LEFT()
 INPUT_DPAD_RIGHT()
 INPUT_FACE_DOWN()
 ```
+
+### state
+
+the STATE_VERSION macro exports the specified version number as the u16_t
+state_version.
+
+then, the STATE and STATE_ARRAY macros export the associated state_*_buffer and
+state_*_size values, which can also be read from and written to by your game:
+
+```c
+// specify that state_version is 43.
+STATE_VERSION(43)
+
+// state_example_scalar_buffer is declared as s64_t.
+STATE(example_scalar, s64_t)
+
+// state_example_vector_buffer is declared as s16_t[12].
+STATE_ARRAY(example_vector, s16_t, 12)
+```

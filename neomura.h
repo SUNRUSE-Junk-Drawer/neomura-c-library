@@ -70,6 +70,9 @@ typedef double f64_t;
 #define INPUT_PAUSE() \
   EXPORT const u8_t input_pause[inputs];
 
+#define STATE_VERSION(version) \
+  EXPORT const u16_t state_version = (version);
+
 #define STATE(name, type) \
   EXPORT type state_ ## name ## _buffer; \
   EXPORT const u32_t state_ ## name ## _size = sizeof(type);
