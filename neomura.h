@@ -22,7 +22,7 @@ typedef double f64_t;
 #define VIDEO(width, height) \
   EXPORT const u16_t video_width = (width); \
   EXPORT const u16_t video_height = (height); \
-  EXPORT u8_t video_buffer[(width) * (height) * 3]; \
+  EXPORT u8_t video_buffer[(width) * (height) * 4]; \
   EXPORT void video_render()
 
 #define AUDIO(length) \
