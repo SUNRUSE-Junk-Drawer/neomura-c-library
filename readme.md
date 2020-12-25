@@ -1,4 +1,4 @@
-# neomura > c game library
+# neomura > c library
 
 single-header gnu89 c library for games for neomura virtual retro games console.
 
