@@ -38,33 +38,69 @@ the following types are declared to match those in the [neomura specification](h
 
 ### refresh rate
 
-the REFRESH_RATE macro exports the specified number of hertz as the u16_t
+the REFRESH_RATE_DECLARATION macro, to be used in header (\*.h) files, declares
 refresh_rate.
 
+REFRESH_RATE (in hertz) should first be defined as an integer.
+
 ```c
-// specify a refresh rate of 60hz.
-REFRESH_RATE(60)
+#define REFRESH_RATE 60
+REFRESH_RATE_DECLARATION
+```
+
+the REFRESH_RATE_IMPLEMENTATION macro, to be used in source (\*.c) files,
+implements and exports refresh_rate.
+
+```c
+REFRESH_RATE_IMPLEMENTATION
 ```
 
 ### elapse event
 
-the ELAPSE macro exports the following function body as the elapse event
-handler.
+the ELAPSE_DECLARATION macro, to be used in header (\*.h) files, declares
+elapse.
 
 ```c
-ELAPSE() {
+ELAPSE_DECLARATION
+```
+
+the ELAPSE_IMPLEMENTATION macro, to be used in source (\*.c) files, implements
+and exports elapse.
+
+```c
+ELAPSE_IMPLEMENTATION {
   // the body of the elapse event.
 }
 ```
 
 ### video
 
-the VIDEO macro exports its arguments as video_width and video_height, and the
-following function body as the video_render event handler (in which the
-video_buffer export will be available for writing).
+the VIDEO_DECLARATION macro, to be used in header (\*.h) files, declares:
+
+- video_width.
+- video_height.
+- video_buffer.
+- video_render.
+
+VIDEO_WIDTH (in pixel columns) and VIDEO_HEIGHT (in pixel rows) should first be
+defined as integers.
 
 ```c
-VIDEO(270, 180) {
+#define VIDEO_WIDTH 270
+#define VIDEO_HEIGHT 180
+VIDEO_DECLARATION
+```
+
+the VIDEO_IMPLEMENTATION macro, to be used in source (\*.c) files, implements
+and exports:
+
+- video_width.
+- video_height.
+- video_buffer.
+- video_render.
+
+```c
+VIDEO_IMPLEMENTATION {
   // the body of the video_render event.
   // video_buffer is available for writing here.
 }
@@ -72,12 +108,29 @@ VIDEO(270, 180) {
 
 ### audio
 
-the AUDIO macro exports its argument as audio_length, and the following function
-body as the audio_render event handler (in which the audio_buffer export will be
-available for writing).
+the AUDIO_DECLARATION macro, to be used in header (\*.h) files, declares:
+
+- audio_length.
+- audio_buffer.
+- audio_render.
+
+AUDIO_LENGTH (in samples per channel per refresh rate frame) should first be
+defined as an integer.
 
 ```c
-AUDIO(735) {
+#define AUDIO_LENGTH 735
+AUDIO_DECLARATION
+```
+
+the AUDIO_IMPLEMENTATION macro, to be used in source (\*.c) files, implements
+and exports:
+
+- audio_length.
+- audio_buffer.
+- audio_render.
+
+```c
+AUDIO_IMPLEMENTATION {
   // the body of the audio_render event.
   // audio_buffer is available for writing here.
 }
@@ -85,11 +138,26 @@ AUDIO(735) {
 
 ### rumble
 
-the RUMBLE macro exports the following function body as the rumble_render event
-handler (in which the rumble_buffer export will be available for writing).
+the RUMBLE_DECLARATION macro, to be used in header (\*.h) files, declares:
+
+- rumble_buffer.
+- rumble_render.
+
+INPUTS (the number of gamepads) should first be defined as an integer.
 
 ```c
-RUMBLE() {
+#define INPUTS 4
+RUMBLE_DECLARATION
+```
+
+the RUMBLE_IMPLEMENTATION macro, to be used in source (\*.c) files, implements
+and exports:
+
+- rumble_buffer.
+- rumble_render.
+
+```c
+RUMBLE_IMPLEMENTATION {
   // the body of the rumble_render event.
   // rumble_buffer is available for writing here.
 }
@@ -97,51 +165,83 @@ RUMBLE() {
 
 ### input
 
-the INPUTS macro exports the specified number of gamepads as the u16_t inputs.
+the following macros exist, where \* is "DECLARATION", for header (\*.h) files,
+or "IMPLEMENTAITON", for source (\*.c) files:
 
-then, the INPUT_* macros export the associated input_* u8_t buffers, which can
-also be read from in your game:
+| macro                  | export/c variable        |
+| ---------------------- | ------------------------ |
+| INPUTS_\*              | inputs                   |
+| INPUT_DPAD_LEFT_\*     | input_dpad_left          |
+| INPUT_DPAD_RIGHT_\*    | input_dpad_right         |
+| INPUT_DPAD_UP_\*       | input_dpad_up            |
+| INPUT_DPAD_DOWN_\*     | input_dpad_down          |
+| INPUT_FACE_LEFT_\*     | input_face_left          |
+| INPUT_FACE_RIGHT_\*    | input_face_right         |
+| INPUT_FACE_UP_\*       | input_face_up            |
+| INPUT_FACE_DOWN_\*     | input_face_down          |
+| INPUT_TRIGGER_LEFT_\*  | input_face_trigger_left  |
+| INPUT_TRIGGER_RIGHT_\* | input_face_trigger_right |
+| INPUT_PAUSE_\*         | input_dpad_pause         |
 
-| macro               | export/c variable        |
-| ------------------- | ------------------------ |
-| INPUT_DPAD_LEFT     | input_dpad_left          |
-| INPUT_DPAD_RIGHT    | input_dpad_right         |
-| INPUT_DPAD_UP       | input_dpad_up            |
-| INPUT_DPAD_DOWN     | input_dpad_down          |
-| INPUT_FACE_LEFT     | input_face_left          |
-| INPUT_FACE_RIGHT    | input_face_right         |
-| INPUT_FACE_UP       | input_face_up            |
-| INPUT_FACE_DOWN     | input_face_down          |
-| INPUT_TRIGGER_LEFT  | input_face_trigger_left  |
-| INPUT_TRIGGER_RIGHT | input_face_trigger_right |
-| INPUT_PAUSE         | input_dpad_pause         |
+INPUTS (the number of gamepads) should first be defined as an integer.
+
+example header (\*.h) file:
 
 ```c
-// specify that four gamepads exist.
-INPUTS(4)
+#define INPUTS 4
+INPUTS_DECLARATION
 
 // input_dpad_left, input_dpad_right and input_face_down are declared as
 // u8_t[4].
-INPUT_DPAD_LEFT()
-INPUT_DPAD_RIGHT()
-INPUT_FACE_DOWN()
+INPUT_DPAD_LEFT_DECLARATION
+INPUT_DPAD_RIGHT_DECLARATION
+INPUT_FACE_DOWN_DECLARATION
+```
+
+example source (\*.c) file:
+
+```c
+INPUTS_IMPLEMENTATION
+
+INPUT_DPAD_LEFT_IMPLEMENTATION
+INPUT_DPAD_RIGHT_IMPLEMENTATION
+INPUT_FACE_DOWN_IMPLEMENTATION
 ```
 
 ### state
 
-the STATE_VERSION macro exports the specified version number as the u16_t
-state_version.
+the following macros exist, where \* is "DECLARATION", for header (\*.h) files,
+or "IMPLEMENTAITON", for source (\*.c) files, and # is the name of a state
+variable:
 
-then, the STATE and STATE_ARRAY macros export the associated state_*_buffer and
-state_*_size values, which can also be read from and written to by your game:
+| macro            | exports/c variables |
+| ---------------- | ------------------- |
+| STATE_VERSION_\* | state_version       |
+| STATE_\*         | state_#_buffer      |
+|                  | state_#_size        |
+| STATE_ARRAY_\*   | state_#_buffer      |
+|                  | state_#_size        |
+
+
+STATE_VERSION should first be defined as an integer.
+
+example header (\*.h) file:
 
 ```c
-// specify that state_version is 43.
-STATE_VERSION(43)
+#define STATE_VERSION 43.
+STATE_VERSION_DECLARATION
 
 // state_example_scalar_buffer is declared as s64_t.
-STATE(example_scalar, s64_t)
+STATE_DECLARATION(example_scalar, s64_t)
 
 // state_example_vector_buffer is declared as s16_t[12].
-STATE_ARRAY(example_vector, s16_t, 12)
+STATE_ARRAY_DECLARATION(example_vector, s16_t, 12)
+```
+
+example source (\*.c) file:
+
+```c
+STATE_VERSION_IMPLEMENTATION
+STATE_IMPLEMENTATION(example_scalar, s64_t)
+STATE_ARRAY_IMPLEMENTATION(example_vector, s16_t, 12)
 ```
